@@ -5,8 +5,6 @@ import time
 
 import requests
 
-from secrets import USERNAME, PASSWORD
-
 
 def sync_part_image(session, part_id, sync_directory, save_image=True):
     if not os.path.exists(sync_directory):
@@ -35,35 +33,6 @@ def sync_part_image(session, part_id, sync_directory, save_image=True):
     del img_response
 
 
-def get_session(username, password):
-    session = requests.Session()
-
-    data = {
-        "userid": username,
-        "password": password,
-        "override": "false",
-        "keepme_loggedin": "false",
-        "mid": "16b44759b6f00000-293bd8adde9ee65b",
-        "pageid": "MAIN",
-    }
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
-    }
-
-    res = session.post(
-        "https://www.bricklink.com/ajax/renovate/loginandout.ajax",
-        data=data,
-        headers=headers,
-    )
-
-    print(f"logged in with status code {res.status_code}")
-
-    # load homepage once to avoid initial redirect
-    session.get("https://www.bricklink.com/")
-
-    return session
-
-
 if __name__ == "__main__":
     parts_to_sync = [
         "4865pb009",
@@ -73,8 +42,7 @@ if __name__ == "__main__":
     ]
     sync_directory = "images"
 
-    # init session
-    session = get_session(USERNAME, PASSWORD)
+    session = requests.Session()
 
     # save images
     num_synced = 0
