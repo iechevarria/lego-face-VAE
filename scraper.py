@@ -3,13 +3,15 @@ import re
 import shutil
 import time
 
-import pandas as pd
 import requests
 
-from secrets import username, password
+from secrets import USERNAME, PASSWORD
 
 
 def sync_part_image(session, part_id, sync_directory, save_image=True):
+    if not os.path.exists(sync_directory):
+        os.mkdir(sync_directory)
+
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
     }
@@ -20,17 +22,20 @@ def sync_part_image(session, part_id, sync_directory, save_image=True):
     )
 
     img_url = re.search(
-        rf"\bimg\.bricklink\.com\/ItemImage\/[A-Z]+\/[0-9]+\/{part_id}\.png\b", response.text
+        rf"\bimg\.bricklink\.com\/ItemImage\/[A-Z]+\/[0-9]+\/{part_id}\.png\b",
+        response.text,
     ).group(0)
 
+    print(img_url)
+
     img_response = session.get(url=f"https://{img_url}", headers=headers, stream=True)
-    with open(f"images/{part_id}.png", "wb") as out_file:
+    with open(f"{sync_directory}/{part_id}.png", "wb+") as out_file:
         shutil.copyfileobj(img_response.raw, out_file)
 
     del img_response
 
 
-def get_session():
+def get_session(username, password):
     session = requests.Session()
 
     data = {
@@ -51,7 +56,7 @@ def get_session():
         headers=headers,
     )
 
-    print(f"logged in status code {res.status_code}")
+    print(f"logged in with status code {res.status_code}")
 
     # load homepage once to avoid initial redirect
     session.get("https://www.bricklink.com/")
@@ -60,30 +65,30 @@ def get_session():
 
 
 if __name__ == "__main__":
-    # get relevant parts to sync
-    df = pd.read_csv("parts-to-sync.csv")
-
-    # # get sets that have not been synced yet
+    parts_to_sync = [
+        "4865pb009",
+        "2336p90",
+        "4592c03",
+        "6026c01",
+    ]
     sync_directory = "images"
-    synced_images = {i.split(".")[0] for i in os.listdir(sync_directory)}
-    images_to_sync = {i for i in df["Number"] if i not in synced_images}
 
     # init session
-    session = get_session()
+    session = get_session(USERNAME, PASSWORD)
 
-    # save tsvs of sets
+    # save images
     num_synced = 0
-    for part_id in images_to_sync:
+    for part_id in parts_to_sync:
 
         try:
             sync_part_image(session, part_id, sync_directory)
 
             num_synced += 1
             if num_synced % 50 == 0:
-                print(f"synced {num_synced} of {len(images_to_sync)}")
-        
+                print(f"synced {num_synced} of {len(parts_to_sync)}")
+
         except AttributeError:
-            print(f'Sync failed for part {part_id}')
+            print(f"Sync failed for part {part_id}")
 
         # crude rate limit
         time.sleep(0.05)
