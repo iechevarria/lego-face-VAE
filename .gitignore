@@ -1,0 +1,5 @@
+.vscode
+images
+__pycache__
+secrets.py
+
