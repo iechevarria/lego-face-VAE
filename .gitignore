@@ -1,3 +1,5 @@
 .vscode
 images
 __pycache__
+*.png
+*.jpg
