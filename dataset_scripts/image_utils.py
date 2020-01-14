@@ -30,7 +30,7 @@ def split_horizontal(src_path, dst_path, filename):
     N = im.shape[1] // 2
 
     halves = [
-        im[x : x + M, y : y + N]
+        im[x: x + M, y: y + N]
         for x in range(0, im.shape[0], M)
         for y in range(0, im.shape[1], N)
     ]
