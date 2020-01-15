@@ -3,7 +3,7 @@ import pickle
 
 import numpy as np
 from keras import backend as K
-from keras.callbacks import ModelCheckpoint
+from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras.layers import (
     Activation,
     BatchNormalization,
@@ -19,7 +19,7 @@ from keras.layers import (
 from keras.models import Model
 from keras.optimizers import Adam
 
-from ml_constants import DEFAULT_MODEL_PATH
+from ml.constants import DEFAULT_MODEL_PATH
 
 
 class VariationalAutoencoder:
@@ -98,7 +98,7 @@ class VariationalAutoencoder:
 
         self.decoder_model = Model(decoder_input, decoder_output)
 
-    def compile_model(self, learning_rate, r_loss_factor):
+    def compile_model(self, lr, r_loss_factor):
         def vae_r_loss(y_true, y_pred):
             r_loss = K.mean(K.square(y_true - y_pred), axis=[1, 2, 3])
             return r_loss_factor * r_loss
@@ -114,14 +114,17 @@ class VariationalAutoencoder:
             kl_loss = vae_kl_loss(y_true, y_pred)
             return r_loss + kl_loss
 
-        optimizer = Adam(lr=learning_rate)
+        optimizer = Adam(lr=lr)
         self.model.compile(
             optimizer=optimizer, loss=vae_loss, metrics=[vae_r_loss, vae_kl_loss]
         )
 
-    def train(self, train_data, batch_size, epochs, lr_decay=1):
+    def train(self, train_data, batch_size, epochs, path=DEFAULT_MODEL_PATH):
+        if not os.path.exists(path):
+            os.makedirs(path)
+
         checkpoint = ModelCheckpoint(
-            os.path.join(DEFAULT_MODEL_PATH, "weights.h5"),
+            os.path.join(path, "weights.h5"),
             save_weights_only=True,
             verbose=1,
         )
