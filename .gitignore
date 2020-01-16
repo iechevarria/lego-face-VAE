@@ -1,7 +1,7 @@
 .vscode
-images
 __pycache__
 *.png
 *.jpg
 model_output
 .ipynb_checkpoints
+.venv

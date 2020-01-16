@@ -1,8 +1,8 @@
 import os
-
-from PIL import Image
 from shutil import copyfile
+
 import numpy as np
+from PIL import Image
 
 
 def move_image(
