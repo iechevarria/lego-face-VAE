@@ -22,14 +22,14 @@ def load_mnist():
 
 
 def load_lego_faces(path="dataset", size=32):
-    faces = []
+    faces = {}
     for fname in os.listdir(path):
         with Image.open(os.path.join(path, fname)) as raw:
             img = raw.resize((size, size), Image.ANTIALIAS)
             img = np.divide(np.array(img), 255)
-            faces.append(img)
+            faces[fname] = img
 
-    return np.array(faces)
+    return faces
 
 
 def plot_reconstructed_images(data, encoder, decoder, n_to_show=10):
@@ -51,6 +51,30 @@ def plot_reconstructed_images(data, encoder, decoder, n_to_show=10):
     for i in range(n_to_show):
         img = reconst_images[i].squeeze()
         sub = fig.add_subplot(2, n_to_show, i + n_to_show + 1)
+        sub.axis("off")
+        sub.imshow(img)
+
+
+def morph_images(image_1, image_2, encoder, decoder, n_steps=10):
+    vec1 = encoder.predict(np.array([image_1]))
+    vec2 = encoder.predict(np.array([image_2]))
+
+    morph_vecs = [
+        np.add(
+            np.multiply(vec1, (n_steps - 1 - i) / (n_steps - 1)),
+            np.multiply(vec2, i / (n_steps - 1)),
+        )
+        for i in range(n_steps)
+    ]
+
+    morph_imgs = [decoder.predict(vec) for vec in morph_vecs]
+
+    fig = plt.figure(figsize=(15, 3))
+    fig.subplots_adjust(hspace=0.4, wspace=0.4)
+
+    for i, morph_img in enumerate(morph_imgs):
+        img = morph_img.squeeze()
+        sub = fig.add_subplot(1, n_steps, i + 1)
         sub.axis("off")
         sub.imshow(img)
 
