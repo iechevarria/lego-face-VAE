@@ -1,7 +1,14 @@
 .vscode
 __pycache__
-*.png
-*.jpg
-model_output
 .ipynb_checkpoints
 .venv
+
+# training set images
+*.png
+*.jpg
+
+# intermediate model weights
+model_output
+
+# unignore doc images
+!docs/img/*.png
