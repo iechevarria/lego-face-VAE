@@ -12,20 +12,6 @@ Much of the code defining the VAE model is derived from
 [*Generative Deep Learning: Teaching Machines to Paint, Write, Compose, and Play*](https://www.amazon.com/Generative-Deep-Learning-Teaching-Machines/dp/1492041947) and from the book's
 accompanying [repository](https://github.com/davidADSP/GDL_code).
 
-### Sample Output
-
-The following is a plot of random images that were reconstructed by the VAE. The
-top image is the input and the bottom image is the VAE's reconstruction: 
-
-<img src="./docs/img/reconstruction.png">
-
-The following are plots of the intermediate vectors between face encodings (face
-morph visualization):
-
-<img src="./docs/img/face-morph-1.png">
-<img src="./docs/img/face-morph-2.png">
-<img src="./docs/img/face-morph-3.png">
-
 ## Quickstart on Google Colab
 
 [Google Colab](https://colab.research.google.com/) is a free environment to run
@@ -61,6 +47,20 @@ The following table lays out directories/files and their purposes:
 | trained_model/                  | Pretrained model params and weights                    |
 | VAE_colab.ipynb                 | Notebook to train and evaluate models                  |
 | dataset.zip                     | Zipped directory of training images                    |
+
+## Sample Output
+
+The following is a plot of random images that were reconstructed by the VAE. The
+top image is the input and the bottom image is the VAE's reconstruction: 
+
+<img src="./docs/img/reconstruction.png">
+
+The following are plots of the intermediate vectors between face encodings (face
+morph visualization):
+
+<img src="./docs/img/face-morph-1.png">
+<img src="./docs/img/face-morph-2.png">
+<img src="./docs/img/face-morph-3.png">
 
 ## Training set details
 
