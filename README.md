@@ -32,7 +32,7 @@ morph visualization):
 Jupyter Notebooks with the option of using GPU/TPU instances.
 
 To run the notebook in Colab, first go to
-[https://colab.research.google.com/github/iechevarria/lego-face-VAE/blob/master/VAE_colab.ipynb]().
+[https://colab.research.google.com/github/iechevarria/lego-face-VAE/blob/master/VAE_colab.ipynb](https://colab.research.google.com/github/iechevarria/lego-face-VAE/blob/master/VAE_colab.ipynb).
 
 Next, run the following commands that appear in the section __"Set up Colab
 environment"__:
