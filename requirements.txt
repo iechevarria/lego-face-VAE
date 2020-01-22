@@ -1,5 +1,6 @@
 Keras==2.2.4
 matplotlib==3.0.2
+moviepy==1.0.1
 numpy==1.16.1
 pandas==0.25.1
 Pillow==6.2.0

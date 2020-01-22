@@ -12,3 +12,6 @@ model_output
 
 # unignore doc images
 !docs/img/*.png
+
+# output video
+*.mp4

@@ -2,6 +2,7 @@ import os
 import pickle
 
 import matplotlib.pyplot as plt
+import moviepy.editor as mpy
 import numpy as np
 from keras.datasets import mnist
 from PIL import Image
@@ -32,6 +33,22 @@ def load_lego_faces(path="dataset", size=32):
     return faces
 
 
+def plot_random_faces(decoder, n_to_show=10):
+    size = int(decoder.inputs[0].shape[1])
+    random_vectors = np.random.normal(loc=0, scale=1, size=(n_to_show, size))
+
+    images = decoder.predict(random_vectors)
+
+    fig = plt.figure(figsize=(15, 3))
+    fig.subplots_adjust(hspace=0.4, wspace=0.4)
+
+    for i in range(n_to_show):
+        img = images[i].squeeze()
+        sub = fig.add_subplot(1, n_to_show, i + 1)
+        sub.axis("off")
+        sub.imshow(img)
+
+
 def plot_reconstructed_images(data, encoder, decoder, n_to_show=10):
     example_idx = np.random.choice(range(len(data)), n_to_show)
     example_images = data[example_idx]
@@ -55,7 +72,7 @@ def plot_reconstructed_images(data, encoder, decoder, n_to_show=10):
         sub.imshow(img)
 
 
-def morph_images(image_1, image_2, encoder, decoder, n_steps=10):
+def generate_morph_images(image_1, image_2, encoder, decoder, n_steps):
     vec1 = encoder.predict(np.array([image_1]))
     vec2 = encoder.predict(np.array([image_2]))
 
@@ -67,23 +84,44 @@ def morph_images(image_1, image_2, encoder, decoder, n_steps=10):
         for i in range(n_steps)
     ]
 
-    morph_imgs = [decoder.predict(vec) for vec in morph_vecs]
+    return [decoder.predict(vec) for vec in morph_vecs]
+
+
+def plot_morph_images(image_1, image_2, encoder, decoder, n_steps=10):
+    morph_images = generate_morph_images(image_1, image_2, encoder, decoder, n_steps)
 
     fig = plt.figure(figsize=(15, 3))
     fig.subplots_adjust(hspace=0.4, wspace=0.4)
 
-    for i, morph_img in enumerate(morph_imgs):
+    for i, morph_img in enumerate(morph_images):
         img = morph_img.squeeze()
         sub = fig.add_subplot(1, n_steps, i + 1)
         sub.axis("off")
         sub.imshow(img)
 
 
+def animate_morph_images(image_1, image_2, encoder, decoder, n_steps=60, loop=True):
+    morph_images = [
+        np.multiply(f[0], 255)
+        for f in generate_morph_images(image_1, image_2, encoder, decoder, n_steps)
+    ]
+
+    if loop:
+        morph_images = (
+            int(n_steps / 5) * [morph_images[0]]
+            + morph_images
+            + int(n_steps / 5) * [morph_images[-1]]
+            + morph_images[::-1]
+        )
+
+    return mpy.ImageSequenceClip(morph_images, fps=30)
+
+
 def load_model(path=DEFAULT_MODEL_PATH):
     with open(os.path.join(path, "params.pkl"), "rb") as f:
         params = pickle.load(f)
 
-    ae = VariationalAutoencoder(*params)
-    ae.model.load_weights(os.path.join(path, "weights.h5"))
+    vae = VariationalAutoencoder(*params)
+    vae.model.load_weights(os.path.join(path, "weights.h5"))
 
-    return ae
+    return vae
