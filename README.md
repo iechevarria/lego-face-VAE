@@ -1,6 +1,6 @@
 # Lego face VAE
 
-Variational autoencoder (VAE) for Lego minifig faces
+Variational autoencoder (VAE) for Lego minifig faces. I have a writeup with more detail here: https://www.echevarria.io/blog/lego-face-vae/
 
 ## Overview
 
