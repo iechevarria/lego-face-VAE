@@ -1,6 +1,7 @@
 # Lego face VAE
 
-Variational autoencoder (VAE) for Lego minifig faces. I have a writeup with more detail here: https://www.echevarria.io/blog/lego-face-vae/
+Variational autoencoder (VAE) for Lego minifig faces. I have a writeup with more
+detail here: https://www.echevarria.io/blog/lego-face-vae/
 
 ## Overview
 
@@ -64,11 +65,8 @@ morph visualization):
 
 ## Training set details
 
-The training data (approximately 3800 128x128 JPEG images of Lego minifig faces)
-is contained in `dataset.zip`. These images were pulled from a 
-[Quartz aticle](https://qz.com/1405657/how-are-lego-emotions-changing-help-us-find-out/)
-and [Bricklink](https://www.bricklink.com/). The photographs from the Quartz
-article were taken by [Christoph Bartneck, Ph.D.](http://www.bartneck.de/)
+The training data (approximately 2600 128x128 JPEG images of Lego minifig faces)
+is contained in `dataset.zip`. These images were pulled from [Bricklink](https://www.bricklink.com/).
 
 The scripts used to pull and process the data are contained in the
 `dataset_scripts` directory. I manually removed images that were low quality
