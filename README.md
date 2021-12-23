@@ -15,6 +15,8 @@ accompanying [repository](https://github.com/davidADSP/GDL_code).
 
 ## Quickstart on Google Colab
 
+NOTE (2021-12-23): This notebook no longer works out of the box on Colab because of issues with dependencies. Such is the joy of Python package management.
+
 [Google Colab](https://colab.research.google.com/) is a free environment to run
 Jupyter Notebooks with the option of using GPU/TPU instances.
 
