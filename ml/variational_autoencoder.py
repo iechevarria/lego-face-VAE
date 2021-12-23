@@ -17,7 +17,7 @@ from keras.layers import (
     Reshape,
 )
 from keras.models import Model
-from keras.optimizers import Adam
+from keras.optimizers import adam_v2
 
 from ml.constants import DEFAULT_MODEL_PATH
 
@@ -114,7 +114,7 @@ class VariationalAutoencoder:
             kl_loss = vae_kl_loss(y_true, y_pred)
             return r_loss + kl_loss
 
-        optimizer = Adam(lr=lr)
+        optimizer = adam_v2.Adam(learning_rate=lr)
         self.model.compile(
             optimizer=optimizer, loss=vae_loss, metrics=[vae_r_loss, vae_kl_loss]
         )
